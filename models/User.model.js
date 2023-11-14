@@ -7,8 +7,7 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Email is required."],
       unique: true,
-      lowercase: true,
-      trim: true,
+     
     },
     password: {
       type: String,
@@ -18,6 +17,14 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Name is required."],
     },
+    role:{
+      type:String,
+      enum:['admin','customer'],
+      default:'customer'
+    },
+    orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
+
+    
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

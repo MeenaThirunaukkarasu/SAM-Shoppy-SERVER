@@ -63,10 +63,14 @@ router.post("/signup", (req, res, next) => {
     .then((createdUser) => {
       // Deconstruct the newly created user object to omit the password
       // We should never expose passwords publicly
-      const { email, name, _id } = createdUser;
+      if(!createdUser) {
+        res.status(500).json({ message: 'Error creating user.'});
+        return;
+      }
+      const { email, name, _id,role } = createdUser;
 
       // Create a new object that doesn't expose the password
-      const user = { email, name, _id };
+      const user = { role,email, name, _id };
 
       // Send a json response containing the user object
       res.status(201).json({ user: user });
@@ -76,16 +80,16 @@ router.post("/signup", (req, res, next) => {
 
 // POST  /auth/login - Verifies email and password and returns a JWT
 router.post("/login", (req, res, next) => {
-  const { email, password } = req.body;
+  const { name, password } = req.body;
 
   // Check if email or password are provided as empty string
-  if (email === "" || password === "") {
+  if (name === "" || password === "") {
     res.status(400).json({ message: "Provide email and password." });
     return;
   }
 
   // Check the users collection if a user with the same email exists
-  User.findOne({ email })
+  User.findOne({ name })
     .then((foundUser) => {
       if (!foundUser) {
         // If the user is not found, send an error response
@@ -98,10 +102,10 @@ router.post("/login", (req, res, next) => {
 
       if (passwordCorrect) {
         // Deconstruct the user object to omit the password
-        const { _id, email, name } = foundUser;
+        const { _id, email, name,role } = foundUser;
 
         // Create an object that will be set as the token payload
-        const payload = { _id, email, name };
+        const payload = { role,_id, email, name };
 
         // Create a JSON Web Token and sign it
         const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
