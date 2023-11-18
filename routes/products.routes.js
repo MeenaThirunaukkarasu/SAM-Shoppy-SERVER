@@ -3,6 +3,16 @@ const router = express.Router();
 const Product = require("../models/Product.model");
 const axios = require("axios");
 
+router.get("/", (req, res, next) => {
+  Product.find()
+    .then((foundProduct) => {
+      // console.log(createdProduct)
+      res.json(foundProduct);
+    })
+    .catch((error) => {
+      console.log("error creating kids product", error);
+    });
+});
 router.get("/kids/boys", (req, res, next) => {
   Product.find({ categories: "boys" })
     .then((foundProduct) => {
