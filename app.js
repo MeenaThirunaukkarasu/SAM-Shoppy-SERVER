@@ -27,6 +27,13 @@ app.use("/products", productsRoutes);
 const dbCreateRoutes = require("./routes/dbCreate.routes");
 app.use("/dbCreate", dbCreateRoutes);
 
+const cartRoutes = require("./routes/cart.routes");
+app.use("/cart", cartRoutes);
+
+const adminRoutes = require("./routes/admin.routes");
+app.use("/admin", adminRoutes);
+
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 

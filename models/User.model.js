@@ -22,9 +22,7 @@ const userSchema = new Schema(
       enum:['admin','customer'],
       default:'customer'
     },
-    orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }],
-
-    
+    orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }],  
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

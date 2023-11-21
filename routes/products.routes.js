@@ -67,6 +67,29 @@ router.get("/:id", (req,res,next) => {
   console.error("error getting product:", error)
 })
 })
+router.patch("/update/:id", (req,res,next) => {
+    const productId = req.params.id;
+    const action=req.body
+    if(action==='add'){
+    Product.findByIdAndUpdate(productId,{ $inc: { availability: -1 } },{new:true})
+    .then((product)=>{
+      res.json(product);
+    })
+    .catch((error)=>{
+      console.error("error getting product:", error)
+    })
+  }  
+ else if(action==='delete'){
+    Product.findByIdAndUpdate(productId,{ $inc: { availability: +1 } },{new:true})
+    .then((product)=>{
+      res.json(product);
+    })
+    .catch((error)=>{
+      console.error("error getting product:", error)
+    })
+  }  
+
+})
 
 
 module.exports = router;
