@@ -13,7 +13,7 @@ router.get("/", (req, res, next) => {
       console.log("error creating kids product", error);
     });
 });
-router.get("/kids/boys", (req, res, next) => {
+router.get("/boys", (req, res, next) => {
   Product.find({ categories: "boys" })
     .then((foundProduct) => {
       // console.log(createdProduct)
@@ -24,7 +24,7 @@ router.get("/kids/boys", (req, res, next) => {
     });
 });
 
-router.get("/kids/girls", (req, res, next) => {
+router.get("/girls", (req, res, next) => {
   Product.find({ categories: "girls" })
     .then((foundProduct) => {
       // console.log(createdProduct)
@@ -88,6 +88,15 @@ router.patch("/update/:id", (req,res,next) => {
       console.error("error getting product:", error)
     })
   }  
+
+})
+
+router.post(`product`, (req, res) => {
+
+  const productData = req.body
+  Product.create(productData).then(newProduct => {
+    res.json(newProduct)
+  })
 
 })
 
