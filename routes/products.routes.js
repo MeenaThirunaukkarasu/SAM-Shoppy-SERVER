@@ -100,5 +100,22 @@ router.post(`product`, (req, res) => {
 
 })
 
+router.post(`/`, (req, res) => {
+
+  const { title, desc, img, availability, categories, price } = req.body
+
+  const productData = {
+
+    title, desc, img, availability, categories, price
+
+  }
+
+  console.log(productData)
+
+  Product.create(productData).then(newProduct => {
+    res.json(newProduct)
+  })
+
+})
 
 module.exports = router;
