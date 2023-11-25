@@ -1,3 +1,5 @@
+const Cart = require("./../models/Cart.model.js");
+
 const express = require("express");
 const router = express.Router();
 
@@ -45,32 +47,38 @@ router.post("/signup", (req, res, next) => {
 
   // Check the users collection if a user with the same email already exists
   User.findOne({ email })
-    .then((foundUser) => {
-      // If the user with the same email already exists, send an error response
-      if (foundUser) {
-        res.status(400).json({ message: "User already exists." });
-        return;
+    .then(async (foundUser) => {
+      try {
+        if (foundUser) {
+          res.status(400).json({ message: "User already exists." });
+          return;
+        }
+
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+
+        const { _id: cartId } = await Cart.create({ products: [] });
+        return await User.create({
+          email,
+          password: hashedPassword,
+          name,
+          cartId,
+        });
+      } catch (e) {
+        console.log(`Error`, e);
       }
-
-      // If email is unique, proceed to hash the password
-      const salt = bcrypt.genSaltSync(saltRounds);
-      const hashedPassword = bcrypt.hashSync(password, salt);
-
-      // Create the new user in the database
-      // We return a pending promise, which allows us to chain another `then`
-      return User.create({ email, password: hashedPassword, name });
     })
     .then((createdUser) => {
       // Deconstruct the newly created user object to omit the password
       // We should never expose passwords publicly
-      if(!createdUser) {
-        res.status(500).json({ message: 'Error creating user.'});
+      if (!createdUser) {
+        res.status(500).json({ message: "Error creating user." });
         return;
       }
-      const { email, name, _id,role } = createdUser;
+      const { email, name, _id, role, cartId } = createdUser;
 
       // Create a new object that doesn't expose the password
-      const user = { role,email, name, _id };
+      const user = { role, email, name, _id, cartId };
 
       // Send a json response containing the user object
       res.status(201).json({ user: user });
@@ -90,11 +98,18 @@ router.post("/login", (req, res, next) => {
 
   // Check the users collection if a user with the same email exists
   User.findOne({ name })
-    .then((foundUser) => {
+    .then(async (foundUser) => {
+    
       if (!foundUser) {
         // If the user is not found, send an error response
         res.status(401).json({ message: "User not found." });
         return;
+      }
+
+      if (!foundUser.cartId) {
+        const { _id } = await Cart.create({ products: [] });
+        console.log(_id)
+        foundUser = await User.findByIdAndUpdate(foundUser._id, { cartId: _id }, { new: true });
       }
 
       // Compare the provided password with the one saved in the database
@@ -102,11 +117,11 @@ router.post("/login", (req, res, next) => {
 
       if (passwordCorrect) {
         // Deconstruct the user object to omit the password
-        const { _id, email, name,role } = foundUser;
+        const { _id, email, name, role, cartId } = foundUser;
 
         // Create an object that will be set as the token payload
-        const payload = { role,_id, email, name };
-
+        const payload = { role, _id, email, name, cartId };
+          console.log(payload)
         // Create a JSON Web Token and sign it
         const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
           algorithm: "HS256",
