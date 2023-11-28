@@ -21,6 +21,16 @@ const userSchema = new Schema(
       enum: ["admin", "customer"],
       default: "customer",
     },
+    userDetails:{
+      contactNumber:[String],
+      address: [{
+        houseNumber: String,
+        street: String,
+        city: String,
+        postalCode: String,
+        country: String,
+      }],
+    },
     orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
     cartId: { type: Schema.Types.ObjectId, ref: "Cart", required: true },
   },

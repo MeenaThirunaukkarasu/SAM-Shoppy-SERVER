@@ -35,6 +35,12 @@ app.use("/cart", isAuthenticated, cartRoutes);
 const adminRoutes = require("./routes/admin.routes");
 app.use("/admin", adminRoutes);
 
+const orderRoutes = require("./routes/order.routes");
+app.use("/order", orderRoutes);
+
+const addressRoutes = require("./routes/address.routes");
+app.use("/address", addressRoutes);
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 

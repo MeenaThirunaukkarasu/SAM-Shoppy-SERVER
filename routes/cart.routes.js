@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Cart = require("../models/Cart.model");
 const User = require("../models/User.model");
-const axios = require("axios");
 
 // -> localhost:5005/cart/:userId
 router.get("/", (req, res, next) => {
@@ -30,7 +29,6 @@ SO idea is NOT to delete the whole cart each time a product is removed, also not
 
 router.post("/add", async (req, res, next) => {
   const { cartDetails } = req.body;
-
   try {
     let cart = await Cart.findById(req.payload.cartId).populate('cartDetails.product');
 
@@ -68,6 +66,8 @@ router.post("/add", async (req, res, next) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+
 
 
 router.delete("/deleteProduct/:id", (req, res, next) => {
