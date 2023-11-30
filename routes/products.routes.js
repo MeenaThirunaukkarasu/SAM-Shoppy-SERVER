@@ -90,17 +90,29 @@ router.patch("/update/:id", (req,res,next) => {
   }  
 
 })
-
-router.post(`product`, (req, res) => {
-
-  const productData = req.body
-  Product.create(productData).then(newProduct => {
-    res.json(newProduct)
+router.delete('/delete/:id',(req,res,next)=>{
+  const productId=req.params.id
+  Product.findByIdAndDelete(productId)
+  .then(response=>{
+  console.log('product deleted successfully')
+  res.json(response)
+  })
+  .catch(error=>{
+    console.log('there was an issue deleting the product',error)
+  })
+  
   })
 
-})
+// router.post(`product`, (req, res) => {
 
-router.post(`/`, (req, res) => {
+//   const productData = req.body
+//   Product.create(productData).then(newProduct => {
+//     res.json(newProduct)
+//   })
+
+// })
+
+router.post(`/add`, (req, res) => {
 
   const { title, desc, img, availability, categories, price } = req.body
 
