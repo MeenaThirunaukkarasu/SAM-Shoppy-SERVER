@@ -6,11 +6,11 @@ const axios = require("axios");
 router.get("/", (req, res, next) => {
   Product.find()
     .then((foundProduct) => {
-      // console.log(createdProduct)
+       console.log(foundProduct)
       res.json(foundProduct);
     })
     .catch((error) => {
-      console.log("error creating kids product", error);
+      console.log("error getting all products", error);
     });
 });
 router.get("/boys", (req, res, next) => {

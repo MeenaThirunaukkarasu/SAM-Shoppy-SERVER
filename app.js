@@ -10,6 +10,9 @@ require("./db");
 const express = require("express");
 
 const app = express();
+const cors = require('cors');
+app.use(cors());
+app.use(express.static(process.env.STATIC_DIR));
 
 const { isAuthenticated } = require("./middleware/jwt.middleware");
 
@@ -40,6 +43,9 @@ app.use("/order", orderRoutes);
 
 const addressRoutes = require("./routes/address.routes");
 app.use("/address", addressRoutes);
+
+const paymentRoutes = require("./routes/payment.routes");
+app.use("/payment", paymentRoutes);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
