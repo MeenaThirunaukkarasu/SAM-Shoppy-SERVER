@@ -7,7 +7,6 @@ const env = require("dotenv").config({ path: "./.env" });
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-08-01",
 });
-
 router.get("/", (req, res) => {
   const path = resolve(process.env.STATIC_DIR + "/index.html");
   res.sendFile(path);
@@ -40,6 +39,7 @@ router.post("/create-payment-intent", async (req, res) => {
   }
 });
 
+  
 // const express = require("express");
 // 
 // const Cart = require("../models/Cart.model");
