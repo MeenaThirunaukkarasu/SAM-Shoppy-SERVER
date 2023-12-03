@@ -49,7 +49,7 @@ router.post("/add", async (req, res, next) => {
        cart.cartDetails[existingProductIndex].quantity ++
       } else {
         // If the product with the same size doesn't exist, add a new entry
-        cart.cartDetails.push({
+        cart.cartDetails.push(  {
           product: cartDetails.product,
           size: cartDetails.size,
           quantity: cartDetails.quantity
