@@ -3,9 +3,9 @@ const { Schema, model } = require("mongoose");
 // TODO: Please make sure you edit the User model to whatever makes sense in this case
 const addressSchema = new Schema(
   {
-      contactNumber:[String],
       address:
        [{
+        contactNumber:String,
         houseNumber: String,
         street: String,
         city: String,

@@ -4,7 +4,13 @@ const autoIncrement = require('../middleware/autoIncrementMiddleware');
 const orderSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    cart:{type: Schema.Types.ObjectId, ref: 'Cart', required: true },
+    cartDetails:[
+      {
+        product: { type: Schema.Types.ObjectId, ref: 'Product' },
+        size: String, 
+        quantity: { type: Number, default: 1 }
+          }
+    ],
     totalAmount: { type: Number, required: true },
     deliveryAddress: { type: Schema.Types.ObjectId, ref: 'Address', required: true},
     status: {
@@ -18,9 +24,6 @@ const orderSchema = new Schema(
   }
 );
 
-// orderSchema.pre('save', autoIncrement.bind(null, 'Order'));
-
-// const YourModel = mongoose.model('YourModel', yourSchema);
 
 const Order = model("Order", orderSchema);
 
