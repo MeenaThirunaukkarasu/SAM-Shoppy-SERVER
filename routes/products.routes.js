@@ -6,7 +6,7 @@ const axios = require("axios");
 router.get("/", (req, res, next) => {
   Product.find()
     .then((foundProduct) => {
-       console.log(foundProduct)
+      //  console.log(foundProduct)
       res.json(foundProduct);
     })
     .catch((error) => {
@@ -114,15 +114,7 @@ router.delete('/delete/:id',(req,res,next)=>{
 
 router.post(`/add`, (req, res) => {
 
-  const { title, desc, img, availability, categories, price } = req.body
-
-  const productData = {
-
-    title, desc, img, availability, categories, price
-
-  }
-
-  console.log(productData)
+  const productData = req.body
 
   Product.create(productData).then(newProduct => {
     res.json(newProduct)

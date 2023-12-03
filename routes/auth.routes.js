@@ -257,5 +257,14 @@ User.findByIdAndUpdate(userID,{
   console.log('error',error)
 })
 })
+router.get("/", (req, res, next) => {
+  User.find()
+    .then((foundUser) => {
+      res.json(foundUser);
+    })
+    .catch((error) => {
+      console.log("error getting all users", error);
+    });
+});
 
 module.exports = router;
