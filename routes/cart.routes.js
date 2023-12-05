@@ -15,18 +15,6 @@ router.get("/", (req, res, next) => {
   }
 });
 
-/*
-1) In post route below, instead of replacing product ID for Cart "product" value, ADD to array of "product"
-2) In delete route below, instead of deleting the whole Cart, only delete its contents ("product" variable)
-2.5) Make sure this is reflected in cart.context.jsx in DeleteProduct function
-
-SO idea is NOT to delete the whole cart each time a product is removed, also not to CREATE a new cart when product is added.
-- Product added: Add to "product" variable of Cart model
-- Product removed: Remove from "product" variable of Cart model
-*/
-
-
-
 router.post("/add", async (req, res, next) => {
   const { cartDetails } = req.body;
   try {
