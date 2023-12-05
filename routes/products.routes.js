@@ -34,7 +34,6 @@ router.get("/girls", (req, res, next) => {
       console.log("error creating kids product", error);
     });
 });
-   
 
 router.get("/men", (req, res, next) => {
   Product.find({ categories: "men" })
@@ -47,61 +46,80 @@ router.get("/men", (req, res, next) => {
     });
 });
 
-router.get("/women", (req,res,next)=>{
-    Product.find({ categories: "women" })
-    .then((foundProduct)=>{
-        res.json(foundProduct);
+router.get("/women", (req, res, next) => {
+  Product.find({ categories: "women" })
+    .then((foundProduct) => {
+      res.json(foundProduct);
     })
-    .catch((error)=>{
-        console.log("error finding womens product", error);
+    .catch((error) => {
+      console.log("error finding womens product", error);
     });
 });
 
-router.get("/:id", (req,res,next) => {
-    const productId = req.params.id;
-    Product.findById(productId)
-    .then((product)=>{
+router.get("/:id", (req, res, next) => {
+  const productId = req.params.id;
+  Product.findById(productId)
+    .then((product) => {
       res.json(product);
     })
-.catch((error)=>{
-  console.error("error getting product:", error)
-})
-})
-router.patch("/update/:id", (req,res,next) => {
-    const productId = req.params.id;
-    const action=req.body
-    if(action==='add'){
-    Product.findByIdAndUpdate(productId,{ $inc: { availability: -1 } },{new:true})
-    .then((product)=>{
-      res.json(product);
-    })
-    .catch((error)=>{
-      console.error("error getting product:", error)
-    })
-  }  
- else if(action==='delete'){
-    Product.findByIdAndUpdate(productId,{ $inc: { availability: +1 } },{new:true})
-    .then((product)=>{
-      res.json(product);
-    })
-    .catch((error)=>{
-      console.error("error getting product:", error)
-    })
-  }  
+    .catch((error) => {
+      console.error("error getting product:", error);
+    });
+});
 
-})
-router.delete('/delete/:id',(req,res,next)=>{
-  const productId=req.params.id
+router.put("/update/:id", (req, res, next) => {
+  const productId = req.params.id;
+  const updateDetails = req.body;
+  Product.findByIdAndUpdate(productId, updateDetails, { new: true })
+    .then((product) => {
+      console.log('product',product)
+      res.json(product);
+    })
+    .catch((error) => {
+      console.error("error getting product:", error);
+    });
+});
+
+router.patch("/update/:id", (req, res, next) => {
+  const productId = req.params.id;
+  const action = req.body;
+  if (action === "add") {
+    Product.findByIdAndUpdate(
+      productId,
+      { $inc: { availability: -1 } },
+      { new: true }
+    )
+      .then((product) => {
+        res.json(product);
+      })
+      .catch((error) => {
+        console.error("error getting product:", error);
+      });
+  } else if (action === "delete") {
+    Product.findByIdAndUpdate(
+      productId,
+      { $inc: { availability: +1 } },
+      { new: true }
+    )
+      .then((product) => {
+        res.json(product);
+      })
+      .catch((error) => {
+        console.error("error getting product:", error);
+      });
+  }
+});
+router.delete("/delete/:id", (req, res, next) => {
+  const productId = req.params.id;
   Product.findByIdAndDelete(productId)
-  .then(response=>{
-  console.log('product deleted successfully')
-  res.json(response)
-  })
-  .catch(error=>{
-    console.log('there was an issue deleting the product',error)
-  })
-  
-  })
+    .then((response) => {
+      console.log("product deleted successfully");
+      res.json(response);
+    })
+    .catch((error) => {
+      console.log("there was an issue deleting the product", error);
+    });
+});
 
 // router.post(`product`, (req, res) => {
 
@@ -112,14 +130,11 @@ router.delete('/delete/:id',(req,res,next)=>{
 
 // })
 
-router.post(`/add`, (req, res) => {
-
-  const productData = req.body
-
-  Product.create(productData).then(newProduct => {
-    res.json(newProduct)
-  })
-
-})
+router.post("/add", (req, res) => {
+  const productData = req.body;
+  Product.create(productData).then((newProduct) => {
+    res.json(newProduct);
+  });
+});
 
 module.exports = router;

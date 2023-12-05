@@ -18,10 +18,10 @@ const productSchema = new Schema({
     enum: ["men", "women", "boys","girls"],
     required: [true, "Category is required."],
   },
-  // size: {
-  //   type: String,
-  //   required: [true, "size is required."],
-  // },
+  size: {
+    type: [String],
+    required: [true, "size is required."],
+  },
   availability: {
     type: String,
     required: [true, "Availability is required."],
