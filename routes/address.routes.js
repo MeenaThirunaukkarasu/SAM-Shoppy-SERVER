@@ -66,8 +66,8 @@ router.delete("/:userId/:addressId", (req, res, next) => {
       // Save the updated address
       return address.save();
     })
-    .then(() => {
-      res.json({ message: 'Address deleted successfully' });
+    .then((updatedAddress) => {
+      res.json(updatedAddress);
     })
     .catch((error) => {
       console.error(error);
