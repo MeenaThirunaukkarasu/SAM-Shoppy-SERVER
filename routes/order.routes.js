@@ -86,27 +86,30 @@ router.post("/create", (req, res, next) => {
         `${populatedOrder.user.email}`,
         "Order Confirmation",
         `Hi ${populatedOrder.user.name}, you have placed an order on SAM Shoppy for ${populatedOrder.totalAmount}. For further details about your order, visit the website https://flourishing-halva-5e3584.netlify.app/`
-      );
+      )
+      .then(response=>{
+        const updateProductPromises = populatedOrder.cartDetails.map((cartItem) => {
+          // ... (remaining code unchanged)
+        });
+  
+        // Wait for all product updates to complete
+        return Promise.all(updateProductPromises)
+          .then(() => {
+            // Clear the cart
+            return Cart.findByIdAndUpdate(
+              cart._id,
+              { $set: { cartDetails: [] } },
+              { new: true }
+            );
+          })
+          .then((updatedCart) => {
+            // Respond with the created and populated order
+            res.json(populatedOrder);
+          });
+      })
 
       // Update product availability and clear the cart
-      const updateProductPromises = populatedOrder.cartDetails.map((cartItem) => {
-        // ... (remaining code unchanged)
-      });
-
-      // Wait for all product updates to complete
-      return Promise.all(updateProductPromises)
-        .then(() => {
-          // Clear the cart
-          return Cart.findByIdAndUpdate(
-            cart._id,
-            { $set: { cartDetails: [] } },
-            { new: true }
-          );
-        })
-        .then((updatedCart) => {
-          // Respond with the created and populated order
-          res.json(populatedOrder);
-        });
+      
     })
     .catch((error) => {
       console.log("error", error);
