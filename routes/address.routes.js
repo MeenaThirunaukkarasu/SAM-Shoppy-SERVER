@@ -40,4 +40,39 @@ router.post("/add", (req, res, next) => {
   });
 });
 
+router.delete("/:userId/:addressId", (req, res, next) => {
+  const userId = req.params.userId;
+  console.log('userId',userId)
+  const addressId = req.params.addressId;
+  console.log('addressId',addressId)
+
+  // Find the user by userId
+  Address.findOne({ user: userId })
+    .then((address) => {
+      if (!address) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      // Find the index of the address with the given addressId
+      const addressIndex = address.address.findIndex((addr) => addr._id.toString() === addressId);
+
+      if (addressIndex === -1) {
+        return res.status(404).json({ error: 'Address not found' });
+      }
+
+      // Remove the address from the array
+      address.address.splice(addressIndex, 1);
+
+      // Save the updated address
+      return address.save();
+    })
+    .then(() => {
+      res.json({ message: 'Address deleted successfully' });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
+});
+
 module.exports = router;
