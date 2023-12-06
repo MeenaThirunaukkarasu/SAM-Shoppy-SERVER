@@ -9,7 +9,11 @@ const MONGO_URI =
   process.env.MONGODB_URI || "mongodb+srv://meenathirunau:meenathirunau@todolist.p7raykg.mongodb.net/SAM-shoppy?retryWrites=true&w=majority";
 
 mongoose
-  .connect(MONGO_URI)
+  .connect(MONGO_URI,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000, // Set a larger timeout (30 seconds)
+  })
   .then((x) => {
     const dbName = x.connections[0].name;
     console.log(`Connected to Mongo! Database name: "${dbName}"`);
