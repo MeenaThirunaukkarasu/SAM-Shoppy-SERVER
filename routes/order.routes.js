@@ -21,13 +21,13 @@ const sendGeneralMail = function (mail, sub, msg) {
     Messages: [
       {
         From: {
-          Name: "ST Hospital",
-          Email: "sunithajosephine22@gmail.com",
+          Name: "SAM Shoppy",
+          Email: "meena.thirunau@gmail.com",
         },
         To: [
           {
-            Email: "sunithatheresa18@gmail.com",
-            Name: "Sunitha",
+            Email: `${mail}`,
+            Name: "ADMIN",
           },
         ],
         Subject: sub,
@@ -85,9 +85,10 @@ router.post("/create", (req, res, next) => {
       sendGeneralMail(
         `${populatedOrder.user.email}`,
         "Order Confirmation",
-        `Hi ${populatedOrder.user.name}, you have placed an order on SAM Shoppy for ${populatedOrder.totalAmount}. For further details about your order, visit the website https://flourishing-halva-5e3584.netlify.app/`
+        `Hi ${populatedOrder.user.name}, you have placed an order on SAM Shoppy for $ ${populatedOrder.totalAmount}. For further details about your order, visit the website https://flourishing-halva-5e3584.netlify.app/`
       )
       .then(response=>{
+        console.log('mail sent successfully')
         const updateProductPromises = populatedOrder.cartDetails.map((cartItem) => {
           // ... (remaining code unchanged)
         });
