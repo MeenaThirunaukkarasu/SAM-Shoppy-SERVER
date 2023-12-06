@@ -20,6 +20,7 @@ router.get("/", (req, res, next) => {
       res.json(order);
     });
 });
+
 router.get("/:id", (req, res, next) => {
 const userId=req.params.id
   Order.find({user:userId})
@@ -28,6 +29,18 @@ const userId=req.params.id
     .then((order) => {
       res.json(order);
     });
+}); 
+
+router.patch("/update/:id", (req, res, next) => {
+const orderId=req.params.id
+  Order.findByIdAndUpdate(orderId,{ status: 'completed' }, { new: true })
+    .then((order) => {
+      res.json(order);
+    })
+    .catch(error=>{
+      res.json('error updating status');
+
+    })
 });
 // router.post("/create", async (req, res, next) => {
 //   const { cart, user, overallTotal, deliveryAddress } = req.body;

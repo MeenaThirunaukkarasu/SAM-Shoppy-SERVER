@@ -156,27 +156,26 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
 
 router.put("/update/:id", (req, res, next) => {
   const userId = req.params.id;
+  console.log(userId)
   const updatedUserInfo = req.body;
+  console.log(updatedUserInfo)
 
   let {
     email,
     password,
     name,
-    role,
-    userDetails,
     newPassword,
+    role
   } = updatedUserInfo;
   if (
     email === "" ||
     password === "" ||
-    name === "" ||
-    firstname === "" ||
-    lastname === ""
+    name === "" 
   ) {
     res
       .status(400)
       .json({
-        message: "Provide email, password , name , firstname and lastname",
+        message: "Provide email, password , name ",
       });
     return;
   }
@@ -185,15 +184,15 @@ router.put("/update/:id", (req, res, next) => {
     res.status(400).json({ message: "Provide a valid email address." });
     return;
   }
-  // // This regular expression checks password for special characters and minimum length
-  // const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
-  // if (!passwordRegex.test(password)) {
-  //   res.status(400).json({
-  //     message:
-  //       "Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.",
-  //   });
-  //   return;
-  // }
+  // This regular expression checks password for special characters and minimum length
+  const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+  if (!passwordRegex.test(password)) {
+    res.status(400).json({
+      message:
+        "Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.",
+    });
+    return;
+  }
 
   if (newPassword === "") {
     newPassword = password;
@@ -223,7 +222,6 @@ router.put("/update/:id", (req, res, next) => {
           password: hashedPassword,
           name,
           role,
-          userDetails,
         },
         { new: true }
       ).then((updatedUser) => {

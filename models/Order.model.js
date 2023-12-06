@@ -1,5 +1,4 @@
 const { Schema, model } = require("mongoose");
-const autoIncrement = require('../middleware/autoIncrementMiddleware'); 
 
 const orderSchema = new Schema(
   {
@@ -28,3 +27,4 @@ const orderSchema = new Schema(
 const Order = model("Order", orderSchema);
 
 module.exports = Order;
+
