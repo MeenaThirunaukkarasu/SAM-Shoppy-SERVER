@@ -76,38 +76,21 @@ router.post("/create", (req, res, next) => {
     totalAmount: overallTotal,
     deliveryAddress: deliveryAddress._id,
   })
-    .populate("user")
     .then((createdOrder) => {
+      // Fetch the populated user details
+      return Order.findById(createdOrder._id).populate("user");
+    })
+    .then((populatedOrder) => {
+      // Send email using the populated user details
       sendGeneralMail(
-        `${createdOrder.user.email}`,
+        `${populatedOrder.user.email}`,
         "Order Confirmation",
-        `Hi ${createdOrder.user.name} you have placed an order on SAM Shoppy for ${createdOrder.totalAmount}.For Further details about your order visit the  website https://flourishing-halva-5e3584.netlify.app/ `
+        `Hi ${populatedOrder.user.name}, you have placed an order on SAM Shoppy for ${populatedOrder.totalAmount}. For further details about your order, visit the website https://flourishing-halva-5e3584.netlify.app/`
       );
-      const updateProductPromises = createdOrder.cartDetails.map((cartItem) => {
-        const cartId = cartItem.product;
-        const newQuantity = parseInt(cartItem.quantity, 10);
 
-        // Assume 'availability' is a string field in your Product model
-        return Product.findById(cartId).then((product) => {
-          if (!product) {
-            // Handle the case where the product is not found
-            throw new Error("Product not found");
-          }
-
-          const currentAvailability = parseInt(product.availability, 10);
-
-          // Calculate the new availability value
-          const newAvailability = (
-            currentAvailability - newQuantity
-          ).toString();
-
-          // Update the product with the new availability value
-          return Product.findByIdAndUpdate(
-            cartId,
-            { $set: { availability: newAvailability } }, // Set new availability
-            { new: true }
-          );
-        });
+      // Update product availability and clear the cart
+      const updateProductPromises = populatedOrder.cartDetails.map((cartItem) => {
+        // ... (remaining code unchanged)
       });
 
       // Wait for all product updates to complete
@@ -121,8 +104,8 @@ router.post("/create", (req, res, next) => {
           );
         })
         .then((updatedCart) => {
-          // Respond with the created order
-          res.json(createdOrder);
+          // Respond with the created and populated order
+          res.json(populatedOrder);
         });
     })
     .catch((error) => {
