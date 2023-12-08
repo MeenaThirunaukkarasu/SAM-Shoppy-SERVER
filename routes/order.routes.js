@@ -67,56 +67,75 @@ router.patch("/update/:id", (req, res, next) => {
     });
 });
 
-router.post("/create", (req, res, next) => {
-  const { cart, user, overallTotal, deliveryAddress } = req.body;
 
-  Order.create({
-    user: user._id,
-    cartDetails: cart.cartDetails,
-    totalAmount: overallTotal,
-    deliveryAddress: deliveryAddress._id,
-  })
-    .then((createdOrder) => {
-      // Fetch the populated user details
-      return Order.findById(createdOrder._id).populate("user");
-    })
-    .then((populatedOrder) => {
-      // Send email using the populated user details
-      sendGeneralMail(
-        `${populatedOrder.user.email}`,
-        "Order Confirmation",
-        `Hi ${populatedOrder.user.name}, you have placed an order on SAM Shoppy for $ ${populatedOrder.totalAmount}. For further details about your order, visit the website https://flourishing-halva-5e3584.netlify.app/`
-      )
-      .then(response=>{
-        console.log('mail sent successfully')
-        const updateProductPromises = populatedOrder.cartDetails.map((cartItem) => {
-          // ... (remaining code unchanged)
-        });
-  
-        // Wait for all product updates to complete
-        return Promise.all(updateProductPromises)
-          .then(() => {
-            // Clear the cart
-            return Cart.findByIdAndUpdate(
-              cart._id,
-              { $set: { cartDetails: [] } },
-              { new: true }
-            );
-          })
-          .then((updatedCart) => {
-            // Respond with the created and populated order
-            res.json(populatedOrder);
-          });
-      })
+router.post("/create", async (req, res, next) => {
+  try {
+    const { cart, user, overallTotal, deliveryAddress } = req.body;
 
-      // Update product availability and clear the cart
-      
-    })
-    .catch((error) => {
-      console.log("error", error);
-      // Handle error appropriately, send an error response, or call the error handling middleware
-      res.status(500).json({ error: "Internal Server Error" });
+    // Create order
+    const createdOrder = await Order.create({
+      user: user._id,
+      cartDetails: cart.cartDetails,
+      totalAmount: overallTotal,
+      deliveryAddress: deliveryAddress._id,
     });
+
+    // Fetch the populated user details
+    const populatedOrder = await Order.findById(createdOrder._id).populate("user");
+
+    // Send email using the populated user details
+    await sendGeneralMail(
+      `${populatedOrder.user.email}`,
+      "Order Confirmation",
+      `Hi ${populatedOrder.user.name}, you have placed an order on SAM Shoppy for $ ${populatedOrder.totalAmount}. For further details about your order, visit the website https://flourishing-halva-5e3584.netlify.app/`
+    );
+    console.log('Mail sent successfully');
+
+    // Update product availability
+    const updateProductPromises = populatedOrder.cartDetails.map(async (cartItem) => {
+      const cartId = cartItem.product;
+      const quantity = parseInt(cartItem.quantity, 10);
+
+      // Fetch the current product
+      const product = await Product.findById(cartId);
+
+      if (!product) {
+        // Handle the case where the product is not found
+        throw new Error("Product not found");
+      }
+
+      const currentAvailability = parseInt(product.availability, 10);
+      const newAvailability = (
+        currentAvailability - quantity
+      ).toString();
+
+      // Update product quantity
+      return Product.findByIdAndUpdate(
+        cartId,
+        { $set: { availability: newAvailability } },
+        { new: true }
+      );
+    });
+
+    // Wait for all product updates to complete
+    await Promise.all(updateProductPromises);
+
+    // Clear the cart
+    const updatedCart = await Cart.findByIdAndUpdate(
+      cart._id,
+      { $set: { cartDetails: [] } },
+      { new: true }
+    );
+
+    // Respond with the created and populated order
+    console.log('Updated cart', updatedCart);
+    res.json(populatedOrder);
+  } catch (error) {
+    console.error("Error:", error);
+    // Handle error appropriately, send an error response, or call the error handling middleware
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
+
 
 module.exports = router;
