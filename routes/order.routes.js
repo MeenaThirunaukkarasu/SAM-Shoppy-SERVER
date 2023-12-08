@@ -89,7 +89,7 @@ router.post("/create", async (req, res, next) => {
       "Order Confirmation",
       `Hi ${populatedOrder.user.name}, you have placed an order on SAM Shoppy for $ ${populatedOrder.totalAmount}. For further details about your order, visit the website https://flourishing-halva-5e3584.netlify.app/`
     );
-    console.log('Mail sent successfully');
+    ('Mail sent successfully');
 
     // Update product availability
     const updateProductPromises = populatedOrder.cartDetails.map(async (cartItem) => {
@@ -128,7 +128,7 @@ router.post("/create", async (req, res, next) => {
     );
 
     // Respond with the created and populated order
-    console.log('Updated cart', updatedCart);
+    ('Updated cart', updatedCart);
     res.json(populatedOrder);
   } catch (error) {
     console.error("Error:", error);

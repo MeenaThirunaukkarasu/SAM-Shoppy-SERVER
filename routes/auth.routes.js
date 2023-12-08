@@ -72,7 +72,7 @@ router.post("/signup", (req, res, next) => {
         }; 
         return await User.create(userObject);
       } catch (e) {
-        console.log(`Error`, e);
+        (`Error`, e);
       }
     })
     .then((createdUser) => {
@@ -115,7 +115,7 @@ router.post("/login", (req, res, next) => {
 
       if (!foundUser.cartId) {
         const { _id } = await Cart.create({ products: [] });
-        // console.log(_id)
+        // (_id)
         foundUser = await User.findByIdAndUpdate(foundUser._id, { cartId: _id }, { new: true });
       }
 
@@ -128,7 +128,7 @@ router.post("/login", (req, res, next) => {
 
         // Create an object that will be set as the token payload
         const payload = { role, _id, email, name, cartId ,orders,userDetails};
-          // console.log(payload)
+          // (payload)
         // Create a JSON Web Token and sign it
         const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
           algorithm: "HS256",
@@ -148,7 +148,7 @@ router.post("/login", (req, res, next) => {
 router.get("/verify", isAuthenticated, (req, res, next) => {
   // If JWT token is valid the payload gets decoded by the
   // isAuthenticated middleware and is made available on `req.payload`
-  // console.log(`req.payload`, req.payload);
+  // (`req.payload`, req.payload);
 
   // Send back the token payload object containing the user data
   res.status(200).json(req.payload);
@@ -156,9 +156,9 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
 
 router.put("/update/:id", (req, res, next) => {
   const userId = req.params.id;
-  console.log(userId)
+  (userId)
   const updatedUserInfo = req.body;
-  console.log(updatedUserInfo)
+  (updatedUserInfo)
 
   let {
     email,
@@ -225,14 +225,14 @@ router.put("/update/:id", (req, res, next) => {
         },
         { new: true }
       ).then((updatedUser) => {
-        console.log("updated user", updatedUser);
+        ("updated user", updatedUser);
         if (!updatedUser) {
           res.status(500).json({ message: "Error creating user." });
           return;
         }
         const { email, username, _id, role } = updatedUser;
         const user = { email, username, _id, role };
-        console.log(user);
+        (user);
         // Send a json response containing the user object
         res.status(201).json({ user: user });
       });
@@ -246,7 +246,7 @@ router.put("/update/:id", (req, res, next) => {
 router.put("/addAddr/:id", (req, res, next) => {
   const { contactNumber, addr } = req.body.userDetails;
   const userID = req.params.id;
-console.log(contactNumber, addr)
+(contactNumber, addr)
 User.findByIdAndUpdate(userID,{
   $set: {
     "userDetails.contactNumber": contactNumber,
@@ -259,7 +259,7 @@ User.findByIdAndUpdate(userID,{
   res.json(updatedUser)
 })
 .catch(error=>{
-  console.log('error',error)
+  ('error',error)
 })
 })
 router.get("/", (req, res, next) => {
@@ -268,7 +268,7 @@ router.get("/", (req, res, next) => {
       res.json(foundUser);
     })
     .catch((error) => {
-      console.log("error getting all users", error);
+      ("error getting all users", error);
     });
 });
 

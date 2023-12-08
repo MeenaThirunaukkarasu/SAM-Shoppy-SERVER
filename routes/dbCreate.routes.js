@@ -33,7 +33,7 @@ async function getProductData() {
 
       return { womenProduct, menProduct };
     } catch (error) {
-      console.log("error getting products", error);
+      ("error getting products", error);
       throw error;
     }
   }
@@ -705,11 +705,11 @@ async function getProductData() {
   router.get("/kids/create", (req, res, next) => {
     Product.create(kidsProduct)
       .then((createdProduct) => {
-        // console.log(createdProduct)
+        // (createdProduct)
         res.json(createdProduct);
       })
       .catch((error) => {
-        console.log("error creating kids product", error);
+        ("error creating kids product", error);
       });
   });
   
@@ -721,11 +721,11 @@ async function getProductData() {
           res.json(createdProduct);
         })
         .catch((error) => {
-          console.log("error creating mens product", error);
+          ("error creating mens product", error);
         });
     }
     catch(error){
-console.log("error getting data from api",error)
+("error getting data from api",error)
     }
     })
    
@@ -737,11 +737,11 @@ console.log("error getting data from api",error)
                 res.json(createdProduct);
             })
             .catch((error)=>{
-                console.log("error creating womens product", error);
+                ("error creating womens product", error);
             });
         }
         catch(error){
-            console.log("error  getting data from api",error)
+            ("error  getting data from api",error)
         }
     });
     

@@ -42,9 +42,9 @@ router.post("/add", (req, res, next) => {
 
 router.delete("/:userId/:addressId", (req, res, next) => {
   const userId = req.params.userId;
-  console.log('userId',userId)
+  ('userId',userId)
   const addressId = req.params.addressId;
-  console.log('addressId',addressId)
+  ('addressId',addressId)
 
   // Find the user by userId
   Address.findOne({ user: userId })

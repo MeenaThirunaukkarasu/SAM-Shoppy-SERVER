@@ -6,43 +6,43 @@ const axios = require("axios");
 router.get("/", (req, res, next) => {
   Product.find()
     .then((foundProduct) => {
-      //  console.log(foundProduct)
+      //  (foundProduct)
       res.json(foundProduct);
     })
     .catch((error) => {
-      console.log("error getting all products", error);
+      ("error getting all products", error);
     });
 });
 router.get("/boys", (req, res, next) => {
   Product.find({ categories: "boys" })
     .then((foundProduct) => {
-      // console.log(createdProduct)
+      // (createdProduct)
       res.json(foundProduct);
     })
     .catch((error) => {
-      console.log("error creating kids product", error);
+      ("error creating kids product", error);
     });
 });
 
 router.get("/girls", (req, res, next) => {
   Product.find({ categories: "girls" })
     .then((foundProduct) => {
-      // console.log(createdProduct)
+      // (createdProduct)
       res.json(foundProduct);
     })
     .catch((error) => {
-      console.log("error creating kids product", error);
+      ("error creating kids product", error);
     });
 });
 
 router.get("/men", (req, res, next) => {
   Product.find({ categories: "men" })
     .then((foundProduct) => {
-      // console.log(createdProduct)
+      // (createdProduct)
       res.json(foundProduct);
     })
     .catch((error) => {
-      console.log("error creating mens product", error);
+      ("error creating mens product", error);
     });
 });
 
@@ -52,7 +52,7 @@ router.get("/women", (req, res, next) => {
       res.json(foundProduct);
     })
     .catch((error) => {
-      console.log("error finding womens product", error);
+      ("error finding womens product", error);
     });
 });
 
@@ -72,7 +72,7 @@ router.put("/update/:id", (req, res, next) => {
   const updateDetails = req.body;
   Product.findByIdAndUpdate(productId, updateDetails, { new: true })
     .then((product) => {
-      console.log('product',product)
+      ('product',product)
       res.json(product);
     })
     .catch((error) => {
@@ -113,11 +113,11 @@ router.delete("/delete/:id", (req, res, next) => {
   const productId = req.params.id;
   Product.findByIdAndDelete(productId)
     .then((response) => {
-      console.log("product deleted successfully");
+      ("product deleted successfully");
       res.json(response);
     })
     .catch((error) => {
-      console.log("there was an issue deleting the product", error);
+      ("there was an issue deleting the product", error);
     });
 });
 

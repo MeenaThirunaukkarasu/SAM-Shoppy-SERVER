@@ -50,7 +50,7 @@ router.post("/add", async (req, res, next) => {
 
     res.json(cart);
   } catch (error) {
-    console.log("Error adding product to the cart:", error);
+    ("Error adding product to the cart:", error);
     res.status(500).send("Internal Server Error");
   }
 });
@@ -61,7 +61,7 @@ router.post("/add", async (req, res, next) => {
 router.delete("/deleteProduct/:id", (req, res, next) => {
   const productId = req.params.id;
   const size = req.body.size;
-  console.log('size',size)
+  ('size',size)
   Cart.findByIdAndUpdate(
     req.payload.cartId,
     { $pull: { "cartDetails": {
@@ -74,7 +74,7 @@ router.delete("/deleteProduct/:id", (req, res, next) => {
       res.json(updatedCart);
     })
     .catch((error) => {
-      console.log("error deleting product from the cart", error);
+      ("error deleting product from the cart", error);
       res.status(500).send("Internal Server Error");
     });
 });
@@ -110,7 +110,7 @@ router.delete("/delete/:id", async (req, res, next) => {
 
     res.json(cart);
   } catch (error) {
-    console.log("Error deleting product from the cart", error);
+    ("Error deleting product from the cart", error);
     res.status(500).send("Internal Server Error");
   }
 });
