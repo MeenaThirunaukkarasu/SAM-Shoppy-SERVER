@@ -1,12 +1,7 @@
 const { Schema, model } = require("mongoose");
-//const autoIncrement = require('../middleware/autoIncrementMiddleware');
-//const mongoose = require("mongoose");
+
 const autoIncrement = require("mongoose-plugin-autoinc")
 
-//const connection = mongoose.connection;
-
-// Initialize the auto-increment plugin with the Mongoose connection
-//autoIncrement.initialize(connection);
 
 const orderSchema = new Schema(
   {
@@ -40,9 +35,6 @@ orderSchema.plugin(autoIncrement.plugin, {
   incrementBy: 1,        // The increment value for each new document
 });
 
-//YourSchema.index({ customField: 1 }, { unique: true });
-
-// const YourModel = mongoose.model('YourModel', yourSchema);
 
 const Order = model("Order", orderSchema);
 

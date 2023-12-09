@@ -131,7 +131,6 @@ router.post("/create", async (req, res, next) => {
     ('Updated cart', updatedCart);
     res.json(populatedOrder);
   } catch (error) {
-    console.error("Error:", error);
     // Handle error appropriately, send an error response, or call the error handling middleware
     res.status(500).json({ error: "Internal Server Error" });
   }

@@ -70,7 +70,6 @@ router.delete("/:userId/:addressId", (req, res, next) => {
       res.json(updatedAddress);
     })
     .catch((error) => {
-      console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });
     });
 });
